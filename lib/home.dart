@@ -10,9 +10,10 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-    final user = FirebaseAuth.instance.currentUser;
+    final userInfo = FirebaseAuth.instance.currentUser;
 
-    signout() async {
+    // Sign Out function
+    signOut() async {
         try {
             // Show loading indicator
             showDialog(
@@ -48,7 +49,7 @@ class _HomePageState extends State<HomePage> {
             Navigator.pop(context); // Close loading on error
             ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                    content: Text("Sign out failed: ${e.toString()}"),
+                    content: Text("Log out failed: ${e.toString()}"),
                     backgroundColor: Colors.red, // Error color
                 ),
             );
@@ -62,7 +63,7 @@ class _HomePageState extends State<HomePage> {
             
             body: Center(
                 child: Text(
-                    'This is Home Page',
+                    'Hello, ${userInfo?.displayName ?? 'User'} 🎉',
                     style: TextStyle(
                         fontSize: 25,
                         fontWeight: FontWeight.bold,
@@ -74,8 +75,9 @@ class _HomePageState extends State<HomePage> {
               padding: const EdgeInsets.only(bottom: 30, right: 20),
                 child: FloatingActionButton(
                     onPressed: (() {
-                        signout();
+                        signOut();
                     }),
+                    
                     child: Icon(
                         Icons.login_rounded,
                         color: Color(0xff7c71b2),
