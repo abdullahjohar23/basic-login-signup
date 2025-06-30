@@ -1,7 +1,8 @@
-import 'package:basic_login_signup/firebase_options.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:basic_login_signup/login.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:basic_login_signup/firebase_options.dart';
 
 Future<void> main() async {
     WidgetsFlutterBinding.ensureInitialized();
@@ -17,7 +18,7 @@ class MyApp extends StatelessWidget {
 
     @override
     Widget build(BuildContext context) {
-        return MaterialApp(
+        return GetMaterialApp( // to use 'get', we need to change 'MaterialApp' to 'GetMaterialApp'
             debugShowCheckedModeBanner: false,
             home: LoginPage(),
         );
