@@ -1,3 +1,4 @@
+import 'package:basic_login_signup/forgotpassword.dart';
 import 'package:flutter/material.dart';
 import 'package:basic_login_signup/home.dart';
 import 'package:basic_login_signup/signup.dart';
@@ -257,19 +258,24 @@ class _LoginPageState extends State<LoginPage> {
                                 SizedBox(height: 20),
                 
                                 //* Forgot Password
-                                Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                
-                                    children: [
-                                        Text(
-                                            'Forgot Password?',
-                                            style: TextStyle(
-                                                color: Colors.black87,
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.w500
+                                GestureDetector(
+                                    onTap: () {
+                                        Navigator.push(context, MaterialPageRoute(builder: (context) => ForgotPasswordPage()));
+                                    },
+                                    child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.end,
+                                                    
+                                        children: [
+                                            Text(
+                                                'Forgot Password?',
+                                                style: TextStyle(
+                                                    color: Colors.black87,
+                                                    fontSize: 18,
+                                                    fontWeight: FontWeight.w500
+                                                ),
                                             ),
-                                        ),
-                                    ],
+                                        ],
+                                    ),
                                 ),
                 
                                 SizedBox(height: 20),
