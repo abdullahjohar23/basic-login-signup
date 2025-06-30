@@ -147,7 +147,7 @@ class _LoginPageState extends State<LoginPage> {
                 
                                     decoration: InputDecoration(
                                         contentPadding: EdgeInsets.symmetric(
-                                            horizontal: 20,
+                                            // horizontal: 5,
                                             vertical: 10,
                                         ),
                 
@@ -155,6 +155,12 @@ class _LoginPageState extends State<LoginPage> {
                                         hintStyle: TextStyle(
                                             color: Colors.grey,
                                             fontSize: 17,
+                                        ),
+
+                                        prefixIcon: Icon(
+                                            Icons.mail_outlined,
+                                            color: Color(0xff7c71b2),
+                                            size: 20,
                                         ),
                 
                                         // Thick border when not focused
@@ -206,6 +212,12 @@ class _LoginPageState extends State<LoginPage> {
                                         hintStyle: TextStyle(
                                             color: Colors.grey,
                                             fontSize: 17,
+                                        ),
+
+                                        prefixIcon: Icon(
+                                            Icons.lock_outlined,
+                                            color: Color(0xff7c71b2),
+                                            size: 20,
                                         ),
                 
                                         // Thick border when not focused
