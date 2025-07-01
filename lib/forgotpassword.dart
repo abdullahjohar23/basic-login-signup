@@ -17,7 +17,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     TextEditingController confirmPasswordController = TextEditingController();
 
     resetPassword() async {
-        await FirebaseAuth.instance.sendPasswordResetEmail(email: gmailController.text);
+        await FirebaseAuth.instance.sendPasswordResetEmail(email: gmailController.text.trim());
     }
 
     @override
