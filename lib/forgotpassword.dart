@@ -33,6 +33,15 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                         // crossAxisAlignment: CrossAxisAlignment.center,
 
                         children: [
+                            //* Icon
+                            Icon(
+                                Icons.privacy_tip_outlined,
+                                size: 55,
+                                color: Color(0xff7c71b2),
+                            ),
+
+                            SizedBox(height: 25),
+
                             //* Reset Password Label
                             Text(
                                 'Reset Password',
