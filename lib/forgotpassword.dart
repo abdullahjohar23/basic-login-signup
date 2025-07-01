@@ -9,15 +9,76 @@ class ForgotPasswordPage extends StatefulWidget {
 }
 
 class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
-    bool _obscureText = true;
-    bool _obscureTextConfirm = true;
+    // bool _obscureText = true;
+    // bool _obscureTextConfirm = true;
 
     TextEditingController gmailController = TextEditingController();
     TextEditingController passwordController = TextEditingController();
     TextEditingController confirmPasswordController = TextEditingController();
 
-    resetPassword() async {
-        await FirebaseAuth.instance.sendPasswordResetEmail(email: gmailController.text.trim());
+    Future<void> resetPassword() async {
+        try {
+            // Show loading indicator
+            showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (context) => Center(child: CircularProgressIndicator()),
+            );
+
+            // Send password reset email
+            await FirebaseAuth.instance.sendPasswordResetEmail(
+                email: gmailController.text.trim(),
+            );
+
+            // Close loading dialog
+            Navigator.pop(context);
+
+            // Show success message
+            ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                    content: Text('Password reset link sent to ${gmailController.text.trim()}'),
+                    backgroundColor: Colors.green,
+                    duration: Duration(seconds: 4),
+                ),
+            );
+
+        } on FirebaseAuthException catch (e) {
+            // Close loading dialog first
+            Navigator.pop(context);
+
+            // Handle specific errors
+            String errorMessage;
+            switch (e.code) {
+                case 'invalid-email':
+                    errorMessage = 'Please enter a valid email address';
+                    break;
+                case 'user-not-found':
+                    errorMessage = 'No account found with this email';
+                    break;
+                default:
+                    errorMessage = 'Failed to send reset link: ${e.message}';
+            }
+
+            // Show error
+            ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                    content: Text(errorMessage),
+                    backgroundColor: Colors.red,
+                ),
+            );
+        } catch (e) {
+            // Handle any other errors
+            Navigator.pop(context);
+            
+            ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                    content: Text('An unexpected error occurred'),
+                    backgroundColor: Colors.red,
+                ),
+            );
+            
+            debugPrint('Reset password error: $e');
+        }
     }
 
     @override
@@ -30,7 +91,6 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                 child: Center(
                     child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        // crossAxisAlignment: CrossAxisAlignment.center,
 
                         children: [
                             //* Icon
@@ -103,7 +163,8 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
 
                             SizedBox(height: 10),
 
-                            //* create new password field
+                            /*
+                            // create new password field
                             TextField(
                                 controller: passwordController,
                                 obscureText: _obscureText,
@@ -174,7 +235,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
 
                             SizedBox(height: 10),
 
-                            //* confirm password field
+                            // confirm password field
                             TextField(
                                 controller: confirmPasswordController,
                                 obscureText: _obscureTextConfirm,
@@ -242,6 +303,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                                     ),
                                 ),
                             ),
+                            */
 
                             SizedBox(height: 30),
                             
