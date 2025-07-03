@@ -21,11 +21,10 @@ class _LoginPageState extends State<LoginPage> {
     //* Sign In Function
     signIn() async {
         try {
-            // Show loading indicator
-            showDialog(
-                context: context,
+            // Show loading indicator (GetX version)
+            Get.dialog(
+                Center(child: CircularProgressIndicator()),
                 barrierDismissible: false,
-                builder: (context) => Center(child: CircularProgressIndicator()),
             );
 
             // Attempt sign-in
@@ -35,30 +34,79 @@ class _LoginPageState extends State<LoginPage> {
             );
             
             // Close loading dialog
-            Navigator.pop(context);
+            Get.back();
 
-            // Show success message before navigation
-            ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                    content: Text('Logged In successfully!'),
-                    backgroundColor: Colors.green, // Optional success color
-                    duration: Duration(seconds: 2),
+            // Show success message (GetX version with improved styling)
+            Get.snackbar(
+                'Success', // Title added for better UX
+                'Logged in successfully',
+                
+                // ===== CORE STYLING =====
+                colorText: Colors.white,
+                backgroundColor: Colors.green,
+                snackPosition: SnackPosition.TOP,
+
+                // ===== LAYOUT =====
+                margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 10), // Better mobile fit
+                borderRadius: 12,
+                padding: const EdgeInsets.all(16),  // Simpler padding
+                barBlur: 4.0, // Background blur effect
+
+                // ===== CONTENT STYLING =====
+                icon: const Icon(Icons.check_circle, size: 24, color: Colors.white), // Changed to check icon
+                shouldIconPulse: true, // Adds attention-grabbing pulse
+                titleText: const Text( // Added title text styling
+                    'Success',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 18,
+                        height: 1.2,
+                    ),
                 ),
+                messageText: const Text(
+                    'Logged in successfully',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 15,
+                        height: 1.4,
+                    ),
+                ),
+
+                // ===== BORDER/SHADOW =====
+                borderColor: Colors.green[700]!.withAlpha(128),
+                borderWidth: 1.5,
+                boxShadows: [
+                    BoxShadow(
+                        color: Colors.black.withAlpha(51),
+                        offset: const Offset(0, 3),
+                        blurRadius: 6,
+                        spreadRadius: 1,
+                    ),
+                ],
+
+                // ===== INTERACTION =====
+                dismissDirection: DismissDirection.horizontal,
+                isDismissible: true,
+                forwardAnimationCurve: Curves.fastEaseInToSlowEaseOut,
+                reverseAnimationCurve: Curves.easeOutExpo,
+                duration: const Duration(seconds: 2), // Reduced to 2 seconds for success
+                animationDuration: const Duration(milliseconds: 700),
+
+                // ===== ACCESSIBILITY =====
+                snackStyle: SnackStyle.FLOATING,
             );
             
-            // Navigate to home and clear navigation stack
-            Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(builder: (_) => HomePage()),
-                (route) => false,
-            );
+            // Navigate to home and clear navigation stack (GetX version)
+            Get.offAll(() => HomePage());
 
         } on FirebaseAuthException catch (e) {
-            // Close loading dialog first
-            Navigator.pop(context);
+            // Close loading dialog first (GetX version)
+            if (Get.isDialogOpen!) Get.back();
             
             // Handle specific error codes
             String errorMessage;
+            
             switch (e.code) {
                 case 'invalid-email':
                     errorMessage = 'Please enter a valid email address';
@@ -79,96 +127,43 @@ class _LoginPageState extends State<LoginPage> {
                     errorMessage = 'Network error. Check your internet connection';
                     break;
                 default:
-                    errorMessage = 'Login failed: ${e.message}';
+                    errorMessage = 'Login failed. Please try again.'; // Generic message for security
             }
             
-            // Show error to user
+            // Show error to user (optimized version)
             Get.snackbar(
                 'Error', 
                 errorMessage,
                 
-                // ===== CORE STYLING =====
+                // Simplified styling that matches your design system
                 colorText: Colors.white,
                 backgroundColor: Colors.red,
                 snackPosition: SnackPosition.TOP,
-
-                // ===== LAYOUT =====
-                margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 10), // Better mobile fit
-                borderRadius: 12,
-                padding: const EdgeInsets.all(16),  // Simpler padding
-                barBlur: 4.0, // Background blur effect
-
-                // ===== CONTENT STYLING =====
-                icon: const Icon(Icons.error_outline_rounded, size: 24, color: Colors.white),
-                shouldIconPulse: true, // Adds attention-grabbing pulse
-                titleText: const Text(
-                    'Error',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 18,
-                        height: 1.2,  // Better line spacing
-                    ),
-                ),
-                messageText: Text(
-                    errorMessage,
-                    style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 15,  // Slightly smaller for readability
-                        height: 1.4,
-                    ),
-                ),
-
-                // ===== BORDER/SHADOW =====
-                borderColor: Colors.red[700]!.withAlpha(128),
-                borderWidth: 1.5,  // Thinner border
-                boxShadows: [
-                    BoxShadow(
-                        color: Colors.black.withAlpha(51), // 20% opacity
-                        offset: const Offset(0, 3),
-                        blurRadius: 6,
-                        spreadRadius: 1,
-                    ),
-                ],
-
-                // ===== INTERACTION =====
-                dismissDirection: DismissDirection.horizontal, // More intuitive swipe
-                isDismissible: true,
-                forwardAnimationCurve: Curves.fastEaseInToSlowEaseOut,
-                reverseAnimationCurve: Curves.easeOutExpo,
-                duration: const Duration(seconds: 3), // Slightly longer display
-                animationDuration: const Duration(milliseconds: 700), // Smoother animation
-
-                // ===== ACCESSIBILITY =====
-                snackStyle: SnackStyle.FLOATING, // Always use floating style
+                duration: const Duration(seconds: 4), // Longer for errors
+                icon: const Icon(Icons.error_outline, color: Colors.white),
             );
-            
             
         } catch (e) {
-            // Log the error (optional)
-            debugPrint('Error occurred: $e');
+            // Close loading dialog if open
+            if (Get.isDialogOpen!) Get.back();
 
-            // Show error message
+            // Show generic error (security-conscious version)
             Get.snackbar(
-                'Error', // Title
-                'Something went wrong: ${e.toString()}', // Message
-                
+                'Error',
+                'Something went wrong. Please try again.',
                 backgroundColor: Colors.red,
-                colorText: Colors.white, // Text color
-                snackPosition: SnackPosition.TOP, // Position (TOP, BOTTOM)
-                duration: const Duration(seconds: 3), // Display time
-                borderRadius: 12, // Rounded corners
-                margin: const EdgeInsets.all(16), // Outer margin
-                icon: const Icon(Icons.error, color: Colors.white), // Optional icon
-                shouldIconPulse: true, // Animate the icon
-                mainButton: TextButton( // Optional action button
-                    onPressed: () => Get.back(), // Dismiss snackbar
-                    child: const Text(
-                        'DISMISS',
-                        style: TextStyle(color: Colors.white),
-                    ),
-                ),
+                colorText: Colors.white,
+                snackPosition: SnackPosition.TOP,
+                duration: const Duration(seconds: 4),
+                mainButton: TextButton(
+                    onPressed: () => Get.back(),
+                    child: const Text('DISMISS', style: TextStyle(color: Colors.white)),
+            )
             );
+            
+
+            // Log full error for developers
+            debugPrint('Login error: $e');
         }
     }
 
