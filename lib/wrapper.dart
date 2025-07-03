@@ -1,3 +1,4 @@
+import 'package:basic_login_signup/verifymail.dart';
 import 'package:flutter/material.dart';
 import 'package:basic_login_signup/login.dart';
 import 'package:basic_login_signup/home.dart';
@@ -17,7 +18,12 @@ class _WrapperState extends State<Wrapper> {
             stream: FirebaseAuth.instance.authStateChanges(),
             builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                    return HomePage();
+                    // print(snapshot.data);
+                    if (snapshot.data!.emailVerified) {
+                        return HomePage();
+                    } else {
+                        return Verifymail();
+                    }
                 } else {
                     return LoginPage();
                 }
