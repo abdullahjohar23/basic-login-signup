@@ -1,9 +1,9 @@
-import 'package:basic_login_signup/forgotpassword.dart';
+import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:basic_login_signup/home.dart';
 import 'package:basic_login_signup/signup.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:get/get.dart';
+import 'package:basic_login_signup/forgotpassword.dart';
 
 class LoginPage extends StatefulWidget {
     const LoginPage({super.key});
