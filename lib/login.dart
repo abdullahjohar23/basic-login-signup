@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:basic_login_signup/home.dart';
 import 'package:basic_login_signup/signup.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:get/get.dart';
 
 class LoginPage extends StatefulWidget {
     const LoginPage({super.key});
@@ -82,24 +83,92 @@ class _LoginPageState extends State<LoginPage> {
             }
             
             // Show error to user
-            ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                    content: Text(errorMessage),
-                    backgroundColor: Colors.red,
-                    duration: Duration(seconds: 3),
+            Get.snackbar(
+                'Error', 
+                errorMessage,
+                
+                // ===== CORE STYLING =====
+                colorText: Colors.white,
+                backgroundColor: Colors.red,
+                snackPosition: SnackPosition.TOP,
+
+                // ===== LAYOUT =====
+                margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 10), // Better mobile fit
+                borderRadius: 12,
+                padding: const EdgeInsets.all(16),  // Simpler padding
+                barBlur: 4.0, // Background blur effect
+
+                // ===== CONTENT STYLING =====
+                icon: const Icon(Icons.error_outline_rounded, size: 24, color: Colors.white),
+                shouldIconPulse: true, // Adds attention-grabbing pulse
+                titleText: const Text(
+                    'Error',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 18,
+                        height: 1.2,  // Better line spacing
+                    ),
                 ),
-            );
-        } catch (e) {
-            // Handle any non-Firebase exceptions
-            Navigator.pop(context);
-            ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                    content: Text('An unexpected error occurred'),
-                    backgroundColor: Colors.red,
+                messageText: Text(
+                    errorMessage,
+                    style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 15,  // Slightly smaller for readability
+                        height: 1.4,
+                    ),
                 ),
+
+                // ===== BORDER/SHADOW =====
+                borderColor: Colors.red[700]!.withAlpha(128),
+                borderWidth: 1.5,  // Thinner border
+                boxShadows: [
+                    BoxShadow(
+                        color: Colors.black.withAlpha(51), // 20% opacity
+                        offset: const Offset(0, 3),
+                        blurRadius: 6,
+                        spreadRadius: 1,
+                    ),
+                ],
+
+                // ===== INTERACTION =====
+                dismissDirection: DismissDirection.horizontal, // More intuitive swipe
+                isDismissible: true,
+                forwardAnimationCurve: Curves.fastEaseInToSlowEaseOut,
+                reverseAnimationCurve: Curves.easeOutExpo,
+                duration: const Duration(seconds: 3), // Slightly longer display
+                animationDuration: const Duration(milliseconds: 700), // Smoother animation
+
+                // ===== ACCESSIBILITY =====
+                snackStyle: SnackStyle.FLOATING, // Always use floating style
             );
             
-            debugPrint('Login error: ${e.toString()}');
+            
+        } catch (e) {
+            // Log the error (optional)
+            debugPrint('Error occurred: $e');
+
+            // Show error message
+            Get.snackbar(
+                'Error', // Title
+                'Something went wrong: ${e.toString()}', // Message
+                
+                backgroundColor: Colors.red,
+                colorText: Colors.white, // Text color
+                snackPosition: SnackPosition.TOP, // Position (TOP, BOTTOM)
+                duration: const Duration(seconds: 3), // Display time
+                borderRadius: 12, // Rounded corners
+                margin: const EdgeInsets.all(16), // Outer margin
+                icon: const Icon(Icons.error, color: Colors.white), // Optional icon
+                shouldIconPulse: true, // Animate the icon
+                mainButton: TextButton( // Optional action button
+                    onPressed: () => Get.back(), // Dismiss snackbar
+                    child: const Text(
+                        'DISMISS',
+                        style: TextStyle(color: Colors.white),
+                    ),
+                ),
+            );
         }
     }
 
