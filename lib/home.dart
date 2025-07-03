@@ -1,3 +1,4 @@
+import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:basic_login_signup/login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -15,43 +16,46 @@ class _HomePageState extends State<HomePage> {
     // Sign Out function
     signOut() async {
         try {
-            // Show loading indicator
-            showDialog(
-                context: context,
+            // Show loading indicator (GetX version)
+            Get.dialog(
+                Center(child: CircularProgressIndicator()),
                 barrierDismissible: false,
-                builder: (context) => Center(child: CircularProgressIndicator()),
             );
 
             await FirebaseAuth.instance.signOut();
             
             // Close loading dialog
-            Navigator.pop(context);
+            Get.back();
             
-            // Show success message before navigation
-            ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                    content: Text('Signed out successfully!'),
-                    backgroundColor: Colors.green, // Optional success color
-                    duration: Duration(seconds: 2),
-                ),
+            // Show success message (Get.snackbar)
+            Get.snackbar(
+                'Success',
+                'Signed out successfully!',
+                colorText: Colors.white,
+                backgroundColor: Colors.green,
+                duration: const Duration(seconds: 2),
+                snackPosition: SnackPosition.BOTTOM,
+                icon: const Icon(Icons.check_circle, color: Colors.white),
             );
             
-            // Navigate after a slight delay to show the message
-            Future.delayed(Duration(milliseconds: 100), () { // will be signed out 0.1 second after clicking on sign out button
-                Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(builder: (_) => LoginPage()),
-                    (route) => false,
-                );
+            // Navigate after delay (GetX navigation)
+            Future.delayed(const Duration(milliseconds: 100), () {
+                Get.offAll(() => LoginPage()); // Clear all routes
             });
 
         } catch (e) {
-            Navigator.pop(context); // Close loading on error
-            ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                    content: Text("Log out failed: ${e.toString()}"),
-                    backgroundColor: Colors.red, // Error color
-                ),
+            // Close loading on error
+            if (Get.isDialogOpen!) Get.back();
+            
+            // Show error message (Get.snackbar)
+            Get.snackbar(
+                'Error',
+                'Log out failed: ${e.toString().replaceFirst('Exception: ', '')}',
+                colorText: Colors.white,
+                backgroundColor: Colors.red,
+                snackPosition: SnackPosition.BOTTOM,
+                icon: const Icon(Icons.error_outline, color: Colors.white),
+                duration: const Duration(seconds: 4), // Longer for errors
             );
         }
     }
