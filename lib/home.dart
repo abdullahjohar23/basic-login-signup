@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:basic_login_signup/login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class HomePage extends StatefulWidget {
     const HomePage({super.key});
@@ -22,7 +23,8 @@ class _HomePageState extends State<HomePage> {
                 barrierDismissible: false,
             );
 
-            await FirebaseAuth.instance.signOut();
+            await GoogleSignIn().signOut(); // This will show up Google Account list after logging out
+            await FirebaseAuth.instance.signOut(); // But this won't show the Google Account list after logging out. Instead, it will directly sign in to the last google account that was used to sign in
             
             // Close loading dialog
             Get.back();
