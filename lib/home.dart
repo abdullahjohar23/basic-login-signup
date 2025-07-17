@@ -14,7 +14,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
     final userInfo = FirebaseAuth.instance.currentUser;
 
-    // Sign Out function
+    // SignOut function
     Future<void> signOut() async {
         try {
             // Show loading indicator (GetX version)
