@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:basic_login_signup/home.dart';
 import 'package:basic_login_signup/signup.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:basic_login_signup/forgotpassword.dart';
 
 class LoginPage extends StatefulWidget {
@@ -19,7 +20,7 @@ class _LoginPageState extends State<LoginPage> {
     TextEditingController passwordController = TextEditingController();
 
     //* Sign In Function
-    signIn() async {
+    Future<void> signin() async {
         try {
             // Show loading indicator (GetX version)
             Get.dialog(
@@ -158,13 +159,25 @@ class _LoginPageState extends State<LoginPage> {
                 mainButton: TextButton(
                     onPressed: () => Get.back(),
                     child: const Text('DISMISS', style: TextStyle(color: Colors.white)),
-            )
+                )
             );
             
-
             // Log full error for developers
             debugPrint('Login error: $e');
         }
+    }
+
+    // Login with google function
+    Future<void> googleLogin() async {
+        final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+        final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
+
+        final credential = GoogleAuthProvider.credential(
+            accessToken: googleAuth?.accessToken,
+            idToken: googleAuth?.idToken,
+        );
+
+        await FirebaseAuth.instance.signInWithCredential(credential);
     }
 
     @override
@@ -347,7 +360,7 @@ class _LoginPageState extends State<LoginPage> {
                                 //* Sign In button
                                 ElevatedButton(
                                     onPressed: (() {
-                                        signIn();
+                                        signin();
                                     }),
                 
                                     style: ElevatedButton.styleFrom(
@@ -387,7 +400,7 @@ class _LoginPageState extends State<LoginPage> {
                                 //* Sign In With Google
                                 ElevatedButton(
                                     onPressed: (() {
-                                        signIn();
+                                        googleLogin();
                                     }),
                 
                                     style: ElevatedButton.styleFrom(
