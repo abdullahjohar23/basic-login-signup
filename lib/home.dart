@@ -15,7 +15,7 @@ class _HomePageState extends State<HomePage> {
     final userInfo = FirebaseAuth.instance.currentUser;
 
     // Sign Out function
-    signOut() async {
+    Future<void> signOut() async {
         try {
             // Show loading indicator (GetX version)
             Get.dialog(
