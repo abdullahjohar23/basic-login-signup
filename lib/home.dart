@@ -69,7 +69,7 @@ class _HomePageState extends State<HomePage> {
             
             body: Center(
                 child: Text(
-                    'Hello, ${userInfo?.displayName ?? 'User'} 🎉',
+                    'Hello, ${userInfo!.email ?? 'User'} 🎉',
                     style: TextStyle(
                         fontSize: 25,
                         fontWeight: FontWeight.bold,
