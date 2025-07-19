@@ -1,9 +1,7 @@
-import 'package:basic_login_signup/wrapper.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:pinput/pinput.dart';
 import 'package:flutter/material.dart';
+import 'package:basic_login_signup/wrapper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class OtpPage extends StatefulWidget {
