@@ -1,5 +1,7 @@
+import 'package:basic_login_signup/otp.dart';
+import 'package:get/get.dart';
 import 'package:flutter/material.dart';
-// import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class PhoneHome extends StatefulWidget {
     const PhoneHome({super.key});
@@ -11,16 +13,30 @@ class PhoneHome extends StatefulWidget {
 class _PhoneHomeState extends State<PhoneHome> {
     TextEditingController phonenumber = TextEditingController();
 
-    // sendCode() async {
-    //     try {
-    //         await FirebaseAuth.instance.verifyPhoneNumber(
-    //             verificationCompleted: verificationCompleted,
-    //             verificationFailed: verificationFailed,
-    //             codeSent: codeSent,
-    //             codeAutoRetrievalTimeout: codeAutoRetrievalTimeout
-    //         );
-    //     }
-    // }
+    Future<void> sendCode() async {
+        try {
+            await FirebaseAuth.instance.verifyPhoneNumber(
+                // verificationCompleted: verificationCompleted,
+                // verificationFailed: verificationFailed,
+                // codeSent: codeSent,
+                // codeAutoRetrievalTimeout: codeAutoRetrievalTimeout
+                phoneNumber: '+88${phonenumber.text}',
+                verificationCompleted: (PhoneAuthCredential credential) {},
+                verificationFailed: (FirebaseAuthException e) {
+                    Get.snackbar('Error Occured', e.code);
+                },
+                codeSent: (String vid, int? token) { // vid means verification id
+                    Get.to(OtpPage(vid: vid));
+                },
+
+                codeAutoRetrievalTimeout: (vid) {},
+            );
+        } on FirebaseAuthException catch (e) {
+            Get.snackbar('Error Occured', e.code);
+        } catch (e) {
+            Get.snackbar('Error Message', e.toString());
+        }
+    }
 
     @override
     Widget build(BuildContext context) {
@@ -59,12 +75,62 @@ class _PhoneHomeState extends State<PhoneHome> {
 
                     SizedBox(height: 20),
 
-                    // phonetext(),
+                    phonetext(),
 
-                    SizedBox(height: 20),
+                    SizedBox(height: 50),
 
-                    // button(),
+                    button(),
                 ],
+            ),
+        );
+    }
+
+    Widget button() {
+        return Center(
+            child: ElevatedButton(
+                onPressed: () {
+                    sendCode();
+                },
+
+                style: ElevatedButton.styleFrom(
+                    padding: EdgeInsets.all(16),
+                    backgroundColor: Color.fromRGBO(90, 208, 248, 1),
+                ),
+
+                child: Padding(
+                    padding: EdgeInsetsGeometry.symmetric(horizontal: 90),
+                    child: Text(
+                        'Recieve OTP',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                        ),
+                    ),
+                ),
+            ),
+        );
+    }
+
+    Widget phonetext() {
+        return Padding(
+            padding: EdgeInsetsGeometry.symmetric(horizontal: 50),
+            child: TextField(
+                controller: phonenumber,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                    prefix: Text('+88'),
+                    prefixIcon: Icon(Icons.phone),
+                    labelText: 'Enter Phone Number',
+                    hintStyle: TextStyle(color: Colors.grey),
+                    labelStyle: TextStyle(color: Colors.grey),
+                    enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.black),
+                    ),
+                    focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blue)
+                    )
+                ),
             ),
         );
     }
