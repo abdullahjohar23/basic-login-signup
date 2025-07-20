@@ -16,15 +16,12 @@ class _PhoneHomeState extends State<PhoneHome> {
     Future<void> sendCode() async {
         try {
             await FirebaseAuth.instance.verifyPhoneNumber(
-                // verificationCompleted: verificationCompleted,
-                // verificationFailed: verificationFailed,
-                // codeSent: codeSent,
-                // codeAutoRetrievalTimeout: codeAutoRetrievalTimeout
                 phoneNumber: '+88${phonenumber.text}',
                 verificationCompleted: (PhoneAuthCredential credential) {},
                 verificationFailed: (FirebaseAuthException e) {
                     Get.snackbar('Error Occured', e.code);
                 },
+
                 codeSent: (String vid, int? token) { // vid means verification id
                     Get.to(OtpPage(vid: vid));
                 },
@@ -63,7 +60,7 @@ class _PhoneHomeState extends State<PhoneHome> {
                     ),
 
                     Padding(
-                        padding: EdgeInsetsGeometry.symmetric(horizontal: 25, vertical: 6),
+                        padding: EdgeInsets.symmetric(horizontal: 25, vertical: 6),
                         child: Text(
                             'An OTP will be sent to your phone',
                             textAlign: TextAlign.center,
@@ -98,7 +95,7 @@ class _PhoneHomeState extends State<PhoneHome> {
                 ),
 
                 child: Padding(
-                    padding: EdgeInsetsGeometry.symmetric(horizontal: 90),
+                    padding: EdgeInsets.symmetric(horizontal: 90),
                     child: Text(
                         'Recieve OTP',
                         style: TextStyle(
@@ -114,7 +111,7 @@ class _PhoneHomeState extends State<PhoneHome> {
 
     Widget phonetext() {
         return Padding(
-            padding: EdgeInsetsGeometry.symmetric(horizontal: 50),
+            padding: EdgeInsets.symmetric(horizontal: 50),
             child: TextField(
                 controller: phonenumber,
                 keyboardType: TextInputType.number,

@@ -1,9 +1,7 @@
-import 'package:basic_login_signup/verifymail.dart';
 import 'package:flutter/material.dart';
-import 'package:basic_login_signup/login.dart';
 import 'package:basic_login_signup/home.dart';
+import 'package:basic_login_signup/phonehome.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
 class Wrapper extends StatefulWidget {
     const Wrapper({super.key});
 
@@ -18,13 +16,13 @@ class _WrapperState extends State<Wrapper> {
             stream: FirebaseAuth.instance.authStateChanges(),
             builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                    if (snapshot.data!.emailVerified) {
+                    // if (snapshot.data!.emailVerified) {
                         return HomePage();
-                    } else {
-                        return Verifymail();
-                    }
+                    // } else {
+                    //     return Verifymail();
+                    // }
                 } else {
-                    return LoginPage();
+                    return PhoneHome();
                 }
             }
         );
