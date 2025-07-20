@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 class OtpPage extends StatefulWidget {
     final String vid;
+    
     const OtpPage({
         super.key,
         required this.vid,
@@ -27,7 +28,7 @@ class _OtpPageState extends State<OtpPage> {
         try {
             await FirebaseAuth.instance.signInWithCredential(credential).then((value) {
                 Get.offAll(Wrapper());
-            }); 
+            });
         } on FirebaseAuthException catch (e) {
             Get.snackbar('Error Occured', e.code);
         } catch (e) {
@@ -39,8 +40,8 @@ class _OtpPageState extends State<OtpPage> {
     Widget build(BuildContext context) {
         return Scaffold(
             backgroundColor: Colors.white,
-
             resizeToAvoidBottomInset: true,
+            
             body: SingleChildScrollView(
                 child: ListView(
                     shrinkWrap: true,
@@ -58,13 +59,13 @@ class _OtpPageState extends State<OtpPage> {
                         ),
 
                         Padding(
-                            padding: EdgeInsetsGeometry.symmetric(horizontal: 25, vertical: 6),
+                            padding: EdgeInsets.symmetric(horizontal: 25, vertical: 6),
                             child: Text('Enter OTP sent to +88 01705336048', textAlign: TextAlign.center,),
                         ),
 
-                        SizedBox(height: 30,),
+                        SizedBox(height: 20,),
 
-                        // textCode(),
+                        textcode(),
 
                         SizedBox(height: 80,),
 
@@ -88,7 +89,7 @@ class _OtpPageState extends State<OtpPage> {
                 ),
 
                 child: Padding(
-                    padding: EdgeInsetsGeometry.symmetric(horizontal: 90),
+                    padding: EdgeInsets.symmetric(horizontal: 80),
                     child: Text(
                         'Verify & Proceed',
                         style: TextStyle(
@@ -105,7 +106,7 @@ class _OtpPageState extends State<OtpPage> {
     Widget textcode() {
         return Center(
             child: Padding(
-                padding: EdgeInsetsGeometry.all(6),
+                padding: EdgeInsets.all(6),
                 child: Pinput(
                     length: 6,
                     onChanged: (value) {
