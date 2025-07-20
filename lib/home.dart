@@ -69,7 +69,7 @@ class _HomePageState extends State<HomePage> {
             
             body: Center(
                 child: Text(
-                    'Hello, ${userInfo!.email ?? 'User'} 🎉',
+                    'Hello, ${userInfo!.phoneNumber ?? 'User'} 🎉',
                     style: TextStyle(
                         fontSize: 25,
                         fontWeight: FontWeight.bold,
@@ -78,7 +78,7 @@ class _HomePageState extends State<HomePage> {
             ),
 
             floatingActionButton: Padding(
-              padding: const EdgeInsets.only(bottom: 30, right: 20),
+                padding: EdgeInsets.only(bottom: 30, right: 20),
                 child: FloatingActionButton(
                     onPressed: (() {
                         signOut();
