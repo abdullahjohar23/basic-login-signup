@@ -1,3 +1,4 @@
+import 'package:basic_login_signup/wrapper.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:basic_login_signup/otp.dart';
@@ -14,24 +15,45 @@ class _PhoneHomeState extends State<PhoneHome> {
     TextEditingController phonenumber = TextEditingController();
 
     Future<void> sendCode() async {
+        // Add phone number validation
+        if (phonenumber.text.isEmpty || phonenumber.text.length < 10) {
+            Get.snackbar('Error', 'Please enter a valid phone number');
+            return;
+        }
+
+        // Show loading
+        Get.dialog(
+            Center(child: CircularProgressIndicator()),
+            barrierDismissible: false,
+        );
+
         try {
+            String formattedNumber = '+880${phonenumber.text.replaceAll(RegExp(r'^0'), '')}';
+            // print('Attempting verification for: $formattedNumber'); // Debug log
+
             await FirebaseAuth.instance.verifyPhoneNumber(
-                phoneNumber: '+88${phonenumber.text}',
-                verificationCompleted: (PhoneAuthCredential credential) {},
-                verificationFailed: (FirebaseAuthException e) {
-                    Get.snackbar('Error Occured', e.code);
+                phoneNumber: formattedNumber,
+                verificationCompleted: (credential) async {
+                    await FirebaseAuth.instance.signInWithCredential(credential);
+                    Get.back(); // Close loading
+                    Get.offAll(Wrapper());
                 },
-
-                codeSent: (String vid, int? token) { // vid means verification id (just for short name)
-                    Get.to(OtpPage(vid: vid));
+                verificationFailed: (e) {
+                    Get.back(); // Close loading
+                    Get.snackbar('Verification Failed', e.message ?? e.code, duration: Duration(seconds: 5));
                 },
-
-                codeAutoRetrievalTimeout: (vid) {},
+                codeSent: (verificationId, forceResendingToken) {
+                    Get.back(); // Close loading
+                    Get.to(OtpPage(vid: verificationId));
+                },
+                codeAutoRetrievalTimeout: (verificationId) {
+                    // Handle timeout if needed
+                },
+                timeout: Duration(seconds: 60),
             );
-        } on FirebaseAuthException catch(e) {
-            Get.snackbar('Error Occured', e.code);
-        } catch(e) {
-            Get.snackbar('Error Message', e.toString());
+        } catch (e) {
+            Get.back(); // Close loading
+            Get.snackbar('Error', e.toString(), duration: Duration(seconds: 5));
         }
     }
 
@@ -117,7 +139,7 @@ class _PhoneHomeState extends State<PhoneHome> {
                 controller: phonenumber,
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
-                    prefix: Text('+88 '),
+                    prefix: Text('+880 '),
                     prefixIcon: Icon(Icons.phone),
                     labelText: 'Enter Phone Number',
                     hintStyle: TextStyle(color: Colors.grey),
