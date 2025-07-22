@@ -1,6 +1,6 @@
-import 'package:basic_login_signup/otp.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import 'package:basic_login_signup/otp.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class PhoneHome extends StatefulWidget {
@@ -22,15 +22,15 @@ class _PhoneHomeState extends State<PhoneHome> {
                     Get.snackbar('Error Occured', e.code);
                 },
 
-                codeSent: (String vid, int? token) { // vid means verification id
+                codeSent: (String vid, int? token) { // vid means verification id (just for short name)
                     Get.to(OtpPage(vid: vid));
                 },
 
                 codeAutoRetrievalTimeout: (vid) {},
             );
-        } on FirebaseAuthException catch (e) {
+        } on FirebaseAuthException catch(e) {
             Get.snackbar('Error Occured', e.code);
-        } catch (e) {
+        } catch(e) {
             Get.snackbar('Error Message', e.toString());
         }
     }
@@ -65,6 +65,7 @@ class _PhoneHomeState extends State<PhoneHome> {
                             'An OTP will be sent to your phone',
                             textAlign: TextAlign.center,
                             style: TextStyle(
+                                color: Colors.black,
                                 fontSize: 20,
                             ),
                         ),
@@ -116,7 +117,7 @@ class _PhoneHomeState extends State<PhoneHome> {
                 controller: phonenumber,
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
-                    prefix: Text('+88'),
+                    prefix: Text('+88 '),
                     prefixIcon: Icon(Icons.phone),
                     labelText: 'Enter Phone Number',
                     hintStyle: TextStyle(color: Colors.grey),
@@ -126,7 +127,7 @@ class _PhoneHomeState extends State<PhoneHome> {
                     ),
                     focusedBorder: UnderlineInputBorder(
                         borderSide: BorderSide(color: Colors.blue)
-                    )
+                    ),
                 ),
             ),
         );
