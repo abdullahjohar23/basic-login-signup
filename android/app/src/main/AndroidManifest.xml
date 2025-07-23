@@ -1,5 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"> <!-- Add tools namespace -->
+    <uses-permission android:name="android.permission.USE_BIOMETRIC" /> <!-- Add this to use biometric -->
     
     <uses-sdk 
         tools:overrideLibrary="com.google.firebase.auth" /> <!-- Add this line -->
