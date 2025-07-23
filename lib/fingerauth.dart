@@ -1,4 +1,7 @@
+import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import 'package:local_auth/local_auth.dart';
+import 'package:basic_login_signup/fingerhome.dart';
 
 class FingerAuth extends StatefulWidget {
     const FingerAuth({super.key});
@@ -8,6 +11,27 @@ class FingerAuth extends StatefulWidget {
 }
 
 class _FingerAuthState extends State<FingerAuth> {
+    final LocalAuthentication auth = LocalAuthentication();
+
+    Future<void> checkAuth() async {
+        bool isAvailable = await auth.canCheckBiometrics;
+        print(isAvailable);
+
+        if (isAvailable) {
+            bool result =await auth.authenticate(
+                localizedReason: 'Scan your fingerprint to proceed',
+            );
+
+            if (result) {
+                Get.to(FingerHome());
+            } else {
+                print('Permission denied');
+            }
+        } else {
+            print('No! Biometric sensor detected');
+        }
+    }
+
     @override
     Widget build(BuildContext context) {
         return Scaffold(
@@ -70,7 +94,7 @@ class _FingerAuthState extends State<FingerAuth> {
                         style: ElevatedButton.styleFrom(
                             backgroundColor: Color.fromRGBO(117, 201, 253, 1),
                         ),
-                        
+
                         child: Padding(
                             padding: EdgeInsets.all(8),
                             child: Text(
