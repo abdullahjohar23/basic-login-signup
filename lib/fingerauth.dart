@@ -20,6 +20,7 @@ class _FingerAuthState extends State<FingerAuth> {
         if (isAvailable) {
             bool result =await auth.authenticate(
                 localizedReason: 'Scan your fingerprint to proceed',
+                options: AuthenticationOptions(biometricOnly: true), // by default, you can also use pattern lock. setting biometricOnly as true will let you only use fingerprint
             );
 
             if (result) {
