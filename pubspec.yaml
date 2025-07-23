@@ -17,6 +17,7 @@ dependencies:
     google_sign_in: ^6.2.1 # the latest version is 7.1.1 but we are using some issue is login() function in login.dart, and that's why we downgraded the version
     pinput: ^5.0.1
     get: ^4.7.2
+    local_auth: ^2.3.0
 
 dev_dependencies:
     flutter_test:
